@@ -187,6 +187,9 @@ class TestAccountService(TestCase):
         resp = self.client.delete(BASE_URL)
         self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
+    ######################################################################
+    # Security Header
+    ######################################################################
 
     def test_security_headers(self):
         """Test that security headers are added"""
@@ -196,3 +199,10 @@ class TestAccountService(TestCase):
         self.assertEqual(response.headers.get("X-Content-Type-Options"), "nosniff")
         self.assertIn("default-src 'self'", response.headers.get("Content-Security-Policy"))
         self.assertEqual(response.headers.get("Referrer-Policy"), "strict-origin-when-cross-origin")
+
+    def test_cors_security(self):
+        """It should return a CORS header"""
+        response = self.client.get('/', environ_overrides=HTTPS_ENVIRON)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Check for the CORS header
+        self.assertEqual(response.headers.get('Access-Control-Allow-Origin'), '*')
