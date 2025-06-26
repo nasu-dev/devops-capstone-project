@@ -149,8 +149,6 @@ class TestAccountService(TestCase):
         data = resp.get_json()
         self.assertEqual(len(data), 5)
 
-    
-
     ######################################################################
     # UPDATE AN EXISTING ACCOUNT
     ######################################################################
